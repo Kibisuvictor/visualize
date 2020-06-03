@@ -1,0 +1,66 @@
+---
+title: "scatter"
+author: "Victor A. Kibisu"
+date: "6/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+
+#load your dataset
+dat <- read_csv("C:\\Users\\hope\\Desktop\\Rgraphics\\Rgraphics\\dataSets\\EconomistData.csv")
+dat
+
+#fit a scatter plot
+dat %>% ggplot(aes(CPI, HDI))+
+  geom_point(color = "blue")
+dat %>% ggplot(aes(CPI,HDI))+
+  geom_point(aes(color = Region), size = 2)
+
+colsi <- c("Americas"= "red", "Asia Pacific"="blue", "East EU Cemt Asia"="gold", "EU W. Europe"="green",
+           "MENA"="pink", "SSA"="black")
+
+library(ggrepel)
+view(dat)
+conty <- dat %>% filter(Country %in% c("Russia", "Italy", "Spain","Argentina","Rwanda","Singapore",
+                                       "Kenya", "Japan","Jamaica", "Brazil", "United States",
+                                       "Togo","Uganda", "Afghanistan","China","South Africa",
+                                       "Seychelles"))
+
+dat %>% ggplot(aes(CPI,HDI))+
+  geom_point(aes(color = Region, size = HDI.Rank))+
+  geom_smooth(method = "loess",se = FALSE, span = .5)+
+  geom_label_repel(aes(label = Country), data = conty)+
+  labs(subtitle = "With ggrepel:geom_label_repel")+
+  labs(x = "Corruption perception index, 2011(10= least corrupt)",
+       y = "Human development index, 2011(1=best)",
+       caption = "Sources:Transparency International;UN Human Development Report",
+       title = "Corruption and Human Development of the world in 2011")+
+  scale_color_manual(name = "Region",
+                     labels = c("Americas", "Asia and Oceania","OECD","Central and Eastern Europe","Middle East and North Africa",
+                                "Sub-Saharan Africa"),values = c("Americas"= "red", "Asia Pacific"="blue", "East EU Cemt Asia"="gold", "EU W. Europe"="white",
+                                                     "MENA"="pink", "SSA"="black") )+
+  xlim(c(1,10))+
+  ylim(0.2,1.0)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill = "tomato"),
+        plot.title = element_text(face = "bold", hjust = .5, color = "blue"),
+        plot.caption = element_text(face = "bold", color = "blue4"),
+        plot.subtitle = element_text(face = "italic", hjust = .5, color = "salmon"),
+        axis.title.x = element_text(color = "#006400"),
+        axis.title.y = element_text(color = "#8b6508"),
+        legend.background = element_rect(fill = "khaki"),
+        legend.title = element_text(color = "blue4", face = "bold"),
+        legend.key = element_rect(fill = "springgreen")
+        )
+  
+             
+```
+
